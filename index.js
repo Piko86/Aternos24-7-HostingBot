@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
         <title>${config.name} Dashboard</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
         <style>
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
           
@@ -258,6 +259,7 @@ app.get('/tutorial', (req, res) => {
   < html >
       <head>
         <title>${config.name} - Setup Guide</title>
+        <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
         <style>
           body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #cbd5e1; padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
           h1, h2 { color: #2dd4bf; }
