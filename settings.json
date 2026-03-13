@@ -1,7 +1,7 @@
 {
   "name": "AFK Bot",
   "bot-account": {
-    "username": "BOT24/7_By_Piko",
+    "username": "Shifyy",
     "password": "",
     "type": "offline"
   },
@@ -9,7 +9,7 @@
     "ip": "Dream0772.aternos.me",
     "port": 21766,
     "version": "1.21.11",
-    "try-creative": false
+    "try-creative": true
   },
   "position": {
     "enabled": true,
