@@ -256,57 +256,292 @@ app.get('/', (req, res) => {
 });
 app.get('/tutorial', (req, res) => {
   res.send(`
-  < html >
-      <head>
-        <title>${config.name} - Setup Guide</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-       <!-- Bright Creeper Head Favicon -->
-       <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
-        <style>
-          body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #cbd5e1; padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
-          h1, h2 { color: #2dd4bf; }
-          h1 { border-bottom: 2px solid #334155; padding-bottom: 10px; }
-          .card { background: #1e293b; padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155; }
-          a { color: #38bdf8; text-decoration: none; }
-          code { background: #334155; padding: 2px 6px; border-radius: 4px; color: #e2e8f0; font-family: monospace; }
-          .btn-home { display: inline-block; margin-bottom: 20px; padding: 8px 16px; background: #334155; color: white; border-radius: 6px; text-decoration: none; }
-        </style>
-      </head>
-      <body>
-        <a href="/" class="btn-home">Back to Dashboard</a>
-        <h1>Setup Guide (Under 15 Minutes)</h1>
-        <div class="card">
-          <h2>Step 1: Configure Aternos</h2>
-          <ol>
-            <li>Go to <strong>Aternos</strong>.</li>
-            <li>Install <strong>Paper/Bukkit</strong> software.</li>
-            <li>Enable <strong>Cracked</strong> mode (Green Switch).</li>
-            <li>Install Plugins: <code>ViaVersion</code>, <code>ViaBackwards</code>, <code>ViaRewind</code>.</li>
-          </ol>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>${config.name} | Premium Setup Guide</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0a0f1e 0%, #1a1f35 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 12px 24px;
+            border-radius: 100px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--accent-primary);
+            transform: translateX(-5px);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .steps-grid {
+            display: grid;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .step-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 4px 4px 0 0;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .step-list {
+            list-style: none;
+        }
+
+        .step-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .step-list li::before {
+            content: '→';
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .link:hover {
+            color: var(--accent-secondary);
+        }
+
+        .link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .step-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            Back to Dashboard
+        </a>
+
+        <h1 class="page-title">Setup Guide</h1>
+        <p class="page-subtitle">Get your AFK bot running in under 15 minutes with this premium setup guide</p>
+
+        <div class="steps-grid">
+            <!-- Step 1 -->
+            <div class="step-card">
+                <div class="step-number">Step 01</div>
+                <h2 class="step-title">Configure Aternos Server</h2>
+                <ul class="step-list">
+                    <li>Go to <strong>Aternos</strong> and select your server</li>
+                    <li>Install <strong>Paper/Bukkit</strong> as your server software</li>
+                    <li>Enable <strong>Cracked</strong> mode (toggle the green switch)</li>
+                    <li>Install essential plugins: <code>ViaVersion</code>, <code>ViaBackwards</code>, <code>ViaRewind</code></li>
+                </ul>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card">
+                <div class="step-number">Step 02</div>
+                <h2 class="step-title">GitHub Repository Setup</h2>
+                <ul class="step-list">
+                    <li>Download the bot code as ZIP and extract the files</li>
+                    <li>Configure <code>settings.json</code> with your server IP and port</li>
+                    <li>Create a new <strong>GitHub repository</strong></li>
+                    <li>Upload all files to your repository</li>
+                </ul>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card">
+                <div class="step-number">Step 03</div>
+                <h2 class="step-title">Deploy on Render (24/7 Hosting)</h2>
+                <ul class="step-list">
+                    <li>Create a free account on <a href="https://render.com" target="_blank" class="link">Render.com</a></li>
+                    <li>Click "New +" and select "Web Service"</li>
+                    <li>Connect your GitHub repository</li>
+                    <li>Configure build settings:
+                        <br>• <strong>Build Command:</strong> <code>npm install</code>
+                        <br>• <strong>Start Command:</strong> <code>npm start</code>
+                    </li>
+                    <li>Click "Create Web Service" and watch it deploy!</li>
+                </ul>
+            </div>
         </div>
-        <div class="card">
-          <h2>Step 2: GitHub Setup</h2>
-          <ol>
-            <li>Download this code as ZIP and extract.</li>
-            <li>Edit <code>settings.json</code> with your IP/Port.</li>
-            <li>Upload all files to a new <strong>GitHub Repository</strong>.</li>
-          </ol>
+
+        <div class="footer-note">
+            <p>✨ Premium AFK Bot Dashboard — Always online, always reliable</p>
         </div>
-        <div class="card">
-          <h2>Step 3: Render (Free 24/7 Hosting)</h2>
-          <ol>
-            <li>Go to <a href="https://render.com" target="_blank">Render.com</a> and create a Web Service.</li>
-            <li>Connect your GitHub.</li>
-            <li>Build Command: <code>npm install</code></li>
-            <li>Start Command: <code>npm start</code></li>
-            <li><strong>Magic:</strong> The bot automatically pings itself to stay awake!</li>
-          </ol>
-        </div>
-        <p style="text-align: center; margin-top: 40px; color: #64748b;">AFK Bot Dashboard</p>
-      </body>
-    </html >
+    </div>
+</body>
+</html>
   `);
 });
 
