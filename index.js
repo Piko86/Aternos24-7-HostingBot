@@ -74,7 +74,6 @@ app.get('/', (req, res) => {
             overflow-x: hidden;
         }
 
-        /* Animated background elements */
         body::before {
             content: '';
             position: absolute;
@@ -92,7 +91,6 @@ app.get('/', (req, res) => {
             z-index: 10;
         }
 
-        /* Glassmorphism card */
         .dashboard-card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -105,7 +103,6 @@ app.get('/', (req, res) => {
             overflow: hidden;
         }
 
-        /* Animated gradient border */
         .dashboard-card::before {
             content: '';
             position: absolute;
@@ -127,7 +124,6 @@ app.get('/', (req, res) => {
             opacity: 0.15;
         }
 
-        /* Header Section */
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -188,7 +184,6 @@ app.get('/', (req, res) => {
             font-weight: 600;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             gap: 16px;
@@ -234,7 +229,6 @@ app.get('/', (req, res) => {
             gap: 12px;
         }
 
-        /* Status Indicator */
         .status-indicator {
             display: flex;
             align-items: center;
@@ -284,7 +278,6 @@ app.get('/', (req, res) => {
             100% { transform: scale(1); opacity: 0; }
         }
 
-        /* Coordinates display */
         .coords-badge {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
             padding: 8px 16px;
@@ -294,7 +287,6 @@ app.get('/', (req, res) => {
             border: 1px solid rgba(99, 102, 241, 0.3);
         }
 
-        /* CTA Button */
         .cta-button {
             display: flex;
             align-items: center;
@@ -338,7 +330,6 @@ app.get('/', (req, res) => {
             height: 20px;
         }
 
-        /* Footer */
         .footer {
             text-align: center;
             margin-top: 24px;
@@ -356,29 +347,11 @@ app.get('/', (req, res) => {
             border-radius: 100px;
             margin-top: 8px;
         }
-
-        /* Loading skeleton animation */
-        .skeleton {
-            background: linear-gradient(
-                90deg,
-                rgba(255, 255, 255, 0.03) 25%,
-                rgba(255, 255, 255, 0.08) 50%,
-                rgba(255, 255, 255, 0.03) 75%
-            );
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="dashboard-card">
-            <!-- Header -->
             <div class="header">
                 <div class="bot-icon">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -398,9 +371,7 @@ app.get('/', (req, res) => {
                 </div>
             </div>
 
-            <!-- Stats Grid -->
             <div class="stats-grid">
-                <!-- Status -->
                 <div class="stat-item">
                     <div class="stat-label">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -417,7 +388,6 @@ app.get('/', (req, res) => {
                     </div>
                 </div>
 
-                <!-- Uptime -->
                 <div class="stat-item">
                     <div class="stat-label">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -431,7 +401,6 @@ app.get('/', (req, res) => {
                     </div>
                 </div>
 
-                <!-- Coordinates -->
                 <div class="stat-item">
                     <div class="stat-label">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -446,7 +415,6 @@ app.get('/', (req, res) => {
                 </div>
             </div>
 
-            <!-- CTA Button -->
             <a href="/tutorial" class="cta-button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M2 3H8C9.10457 3 10 3.89543 10 5V19C10 20.1046 9.10457 21 8 21H2V3Z"/>
@@ -462,7 +430,6 @@ app.get('/', (req, res) => {
                 </svg>
             </a>
 
-            <!-- Footer -->
             <div class="footer">
                 <div>Premium AFK Bot Dashboard</div>
                 <div class="refresh-badge">
@@ -487,11 +454,10 @@ app.get('/', (req, res) => {
             const h = Math.floor(seconds / 3600);
             const m = Math.floor((seconds % 3600) / 60);
             const s = Math.floor(seconds % 60);
-            return `${h}h ${m}m ${s}s`;
+            return h + 'h ' + m + 'm ' + s + 's';
         }
 
         function updateStatusUI(status, uptime, coords) {
-            // Update status
             if (status === 'connected') {
                 statusText.innerText = 'Online & Running';
                 statusDot.className = 'status-dot online';
@@ -503,12 +469,10 @@ app.get('/', (req, res) => {
                 statusDot.className = 'status-dot offline';
             }
 
-            // Update uptime
             uptimeText.innerText = formatUptime(uptime || 0);
 
-            // Update coordinates
             if (coords && coords.x !== undefined) {
-                coordsText.innerHTML = `📍 ${Math.floor(coords.x)}, ${Math.floor(coords.y)}, ${Math.floor(coords.z)}`;
+                coordsText.innerHTML = '📍 ' + Math.floor(coords.x) + ', ' + Math.floor(coords.y) + ', ' + Math.floor(coords.z);
             } else {
                 coordsText.innerHTML = '📍 Searching...';
             }
@@ -527,13 +491,9 @@ app.get('/', (req, res) => {
             }
         }
 
-        // Initial fetch
         fetchBotStatus();
-
-        // Set up auto-refresh
         setInterval(fetchBotStatus, 5000);
 
-        // Add smooth entrance animation
         document.querySelector('.dashboard-card').style.opacity = '0';
         document.querySelector('.dashboard-card').style.transform = 'translateY(20px)';
         
@@ -547,6 +507,308 @@ app.get('/', (req, res) => {
 </html>
   `);
 });
+
+app.get('/tutorial', (req, res) => {
+  res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>${config.name} | Premium Setup Guide</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0a0f1e 0%, #1a1f35 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 12px 24px;
+            border-radius: 100px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--accent-primary);
+            transform: translateX(-5px);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .steps-grid {
+            display: grid;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .step-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 4px 4px 0 0;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .step-list {
+            list-style: none;
+        }
+
+        .step-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .step-list li::before {
+            content: '→';
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .link:hover {
+            color: var(--accent-secondary);
+        }
+
+        .link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .step-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            Back to Dashboard
+        </a>
+
+        <h1 class="page-title">Setup Guide</h1>
+        <p class="page-subtitle">Get your AFK bot running in under 15 minutes with this premium setup guide</p>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">Step 01</div>
+                <h2 class="step-title">Configure Aternos Server</h2>
+                <ul class="step-list">
+                    <li>Go to <strong>Aternos</strong> and select your server</li>
+                    <li>Install <strong>Paper/Bukkit</strong> as your server software</li>
+                    <li>Enable <strong>Cracked</strong> mode (toggle the green switch)</li>
+                    <li>Install essential plugins: <code>ViaVersion</code>, <code>ViaBackwards</code>, <code>ViaRewind</code></li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">Step 02</div>
+                <h2 class="step-title">GitHub Repository Setup</h2>
+                <ul class="step-list">
+                    <li>Download the bot code as ZIP and extract the files</li>
+                    <li>Configure <code>settings.json</code> with your server IP and port</li>
+                    <li>Create a new <strong>GitHub repository</strong></li>
+                    <li>Upload all files to your repository</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">Step 03</div>
+                <h2 class="step-title">Deploy on Render (24/7 Hosting)</h2>
+                <ul class="step-list">
+                    <li>Create a free account on <a href="https://render.com" target="_blank" class="link">Render.com</a></li>
+                    <li>Click "New +" and select "Web Service"</li>
+                    <li>Connect your GitHub repository</li>
+                    <li>Configure build settings:
+                        <br>• <strong>Build Command:</strong> <code>npm install</code>
+                        <br>• <strong>Start Command:</strong> <code>npm start</code>
+                    </li>
+                    <li>Click "Create Web Service" and watch it deploy!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <p>✨ Premium AFK Bot Dashboard — Always online, always reliable</p>
+        </div>
+    </div>
+</body>
+</html>
+  `);
+});
+
+// Health endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'connected',
+    uptime: process.uptime(),
+    coords: {
+      x: 123,
+      y: 64,
+      z: 456
+    }
+  });
+});
+
 app.get('/tutorial', (req, res) => {
   res.send(`
 <!DOCTYPE html>
