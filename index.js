@@ -27,231 +27,524 @@ let botState = {
 // Health check endpoint for monitoring
 app.get('/', (req, res) => {
   res.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <title>${config.name} Dashboard</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-          
-          :root {
-            --bg: #0f172a;
-            --container-bg: #111827;
-            --card-bg: #1f2937;
-            --accent: #2dd4bf;
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-          }
-
-          body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>${config.name} | Premium Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
             margin: 0;
-          }
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-          .container {
-            background: var(--container-bg);
-            padding: 3rem 2rem;
-            border-radius: 2rem;
-            width: 420px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid #1f2937;
-            text-align: center;
-          }
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0a0f1e 0%, #1a1f35 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-highlight: rgba(255, 255, 255, 0.02);
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-glow: rgba(99, 102, 241, 0.5);
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.3);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
 
-          h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-bottom: 2.5rem;
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            color: #f1f5f9;
-          }
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-          .card {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            padding: 1.25rem 1.75rem;
-            margin-bottom: 1rem;
-            text-align: left;
-            border-left: 4px solid var(--accent);
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Glassmorphism card */
+        .dashboard-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
-            transition: transform 0.2s;
-          }
-          
-          .card:hover { transform: translateX(5px); }
+        }
 
-          .label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-          }
+        /* Animated gradient border */
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--accent-primary), 
+                var(--accent-secondary), 
+                var(--accent-primary));
+            border-radius: 42px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-          .value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--accent);
+        .dashboard-card:hover::before {
+            opacity: 0.15;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .bot-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 24px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            text-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
-          }
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 20px 30px -10px var(--accent-glow);
+            position: relative;
+        }
 
-          .dot {
+        .bot-icon::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 27px;
+            opacity: 0.5;
+            filter: blur(10px);
+            z-index: -1;
+        }
+
+        .bot-icon svg {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .server-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 100px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+        }
+
+        .server-badge strong {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-label svg {
+            width: 16px;
+            height: 16px;
+            opacity: 0.5;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #4ade80;
-            box-shadow: 0 0 10px #4ade80;
-            display: inline-block;
-          }
+            position: relative;
+        }
 
-          .dot.offline {
-            background: #f87171;
-            box-shadow: 0 0 10px #f87171;
-          }
+        .status-dot.online {
+            background: var(--success);
+            box-shadow: 0 0 20px var(--success-glow);
+        }
 
-          .pulse {
-            animation: pulse-animation 2s infinite;
-          }
+        .status-dot.online::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: var(--success);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: pulse 2s infinite;
+        }
 
-          @keyframes pulse-animation {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
-          }
-          
-          .offline.pulse {
-            animation: pulse-offline 2s infinite;
-          }
-          
-          @keyframes pulse-offline {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(248, 113, 113, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); }
-          }
+        .status-dot.offline {
+            background: var(--danger);
+            box-shadow: 0 0 20px var(--danger-glow);
+        }
 
-          .btn {
-            display: inline-flex;
+        .status-dot.offline::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: var(--danger);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            70% { transform: scale(1.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        /* Coordinates display */
+        .coords-badge {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            background: var(--accent);
-            color: #0f172a;
-            padding: 1rem 2rem;
-            border-radius: 1rem;
-            font-weight: 700;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
             text-decoration: none;
-            margin-top: 1.5rem;
-            transition: all 0.2s;
-            box-shadow: 0 0 20px rgba(45, 212, 191, 0.4);
+            padding: 18px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
-            box-sizing: border-box;
-          }
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
 
-          .btn:hover {
+        .cta-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(45, 212, 191, 0.6);
-            filter: brightness(1.1);
-          }
+            box-shadow: 0 20px 30px -10px var(--accent-glow);
+        }
 
-          .footer {
-            margin-top: 1.5rem;
-            font-size: 0.8125rem;
-            color: #4b5563;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>🤖 ${config.name}</h1>
-          
-          <div class="card">
-            <div class="label">Status</div>
-            <div class="value">
-              <span id="status-dot" class="dot pulse"></span>
-              <span id="status-text">Connecting...</span>
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            letter-spacing: 0.5px;
+        }
+
+        .refresh-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px 8px;
+            border-radius: 100px;
+            margin-top: 8px;
+        }
+
+        /* Loading skeleton animation */
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.03) 25%,
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.03) 75%
+            );
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-card">
+            <!-- Header -->
+            <div class="header">
+                <div class="bot-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C8 2 5 5 5 9V13C5 16.86 8 20 12 20C16 20 19 16.86 19 13V9C19 5 16 2 12 2Z" fill="white" fill-opacity="0.9"/>
+                        <path d="M15 13C15 14.66 13.66 16 12 16C10.34 16 9 14.66 9 13C9 11.34 10.34 10 12 10C13.66 10 15 11.34 15 13Z" fill="url(#gradient)"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="9" y1="10" x2="15" y2="16" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6366f1"/>
+                                <stop offset="1" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1>${config.name}</h1>
+                <div class="server-badge">
+                    <strong>⛏️</strong> ${config.server.ip}
+                </div>
             </div>
-          </div>
 
-          <div class="card">
-            <div class="label">Uptime</div>
-            <div class="value" id="uptime-text">0h 0m 0s</div>
-          </div>
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <!-- Status -->
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                        </svg>
+                        System Status
+                    </div>
+                    <div class="stat-value">
+                        <div class="status-indicator">
+                            <span id="status-dot" class="status-dot"></span>
+                            <span id="status-text">Connecting...</span>
+                        </div>
+                    </div>
+                </div>
 
-          <div class="card">
-            <div class="label">Coordinates</div>
-            <div class="value">
-              📍 <span id="coords-text">Searching...</span>
+                <!-- Uptime -->
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Uptime
+                    </div>
+                    <div class="stat-value" id="uptime-text">
+                        0h 0m 0s
+                    </div>
+                </div>
+
+                <!-- Coordinates -->
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10.5C21 16 12 23 12 23C12 23 3 16 3 10.5C3 6.35786 7.02944 3 12 3C16.9706 3 21 6.35786 21 10.5Z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        Current Position
+                    </div>
+                    <div class="stat-value">
+                        <span class="coords-badge" id="coords-text">📍 Searching...</span>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="card">
-            <div class="label">Server</div>
-            <div class="value" style="font-size: 1.1rem; color: #5eead4;">${config.server.ip}</div>
-          </div>
+            <!-- CTA Button -->
+            <a href="/tutorial" class="cta-button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3H8C9.10457 3 10 3.89543 10 5V19C10 20.1046 9.10457 21 8 21H2V3Z"/>
+                    <path d="M22 3H16C14.8954 3 14 3.89543 14 5V19C14 20.1046 14.8954 21 16 21H22V3Z"/>
+                    <line x1="10" y1="9" x2="14" y2="9"/>
+                    <line x1="10" y1="12" x2="14" y2="12"/>
+                    <line x1="10" y1="15" x2="14" y2="15"/>
+                </svg>
+                View Setup Guide
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </a>
 
-          <a href="/tutorial" class="btn">📘 View Setup Guide</a>
-          
-          <div class="footer">Auto-refreshing every 5s</div>
+            <!-- Footer -->
+            <div class="footer">
+                <div>Premium AFK Bot Dashboard</div>
+                <div class="refresh-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                        <path d="M23 4L23 10 17 10"/>
+                        <path d="M1 20L1 14 7 14"/>
+                        <path d="M3.51 9C4.01717 7.56678 4.87913 6.2854 6.01547 5.275C7.1518 4.2646 8.51853 3.55976 10 3.224C11.4815 2.88824 13.0166 2.93434 14.476 3.35775C15.9354 3.78116 17.2696 4.5653 18.37 5.63L23 10M1 14L5.63 18.37C6.7304 19.4347 8.0646 20.2188 9.524 20.6422C10.9834 21.0657 12.5185 21.1118 14 20.776C15.4815 20.4402 16.8482 19.7354 17.9845 18.725C19.1209 17.7146 19.9828 16.4332 20.49 15"/>
+                    </svg>
+                    Auto-refresh every 5 seconds
+                </div>
+            </div>
         </div>
+    </div>
 
-        <script>
-          const statusText = document.getElementById('status-text');
-          const statusDot = document.getElementById('status-dot');
-          const uptimeText = document.getElementById('uptime-text');
-          const coordsText = document.getElementById('coords-text');
+    <script>
+        const statusText = document.getElementById('status-text');
+        const statusDot = document.getElementById('status-dot');
+        const uptimeText = document.getElementById('uptime-text');
+        const coordsText = document.getElementById('coords-text');
 
-          function formatUptime(s) {
-            const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
-            return h + 'h ' + m + 'm ' + sec + 's';
-          }
+        function formatUptime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            return `${h}h ${m}m ${s}s`;
+        }
 
-          async function update() {
-            try {
-              const r = await fetch('/health');
-              const data = await r.json();
-              
-              if (data.status === 'connected') {
+        function updateStatusUI(status, uptime, coords) {
+            // Update status
+            if (status === 'connected') {
                 statusText.innerText = 'Online & Running';
-                statusDot.className = 'dot pulse';
-              } else {
-                statusText.innerText = 'Reconnecting...';
-                statusDot.className = 'dot offline pulse';
-              }
-
-              uptimeText.innerText = formatUptime(data.uptime);
-              
-              if (data.coords) {
-                coordsText.innerText = Math.floor(data.coords.x) + ', ' + Math.floor(data.coords.y) + ', ' + Math.floor(data.coords.z);
-              } else {
-                coordsText.innerText = 'Searching Position...';
-              }
-            } catch (e) {
-              statusText.innerText = 'System Offline';
-              statusDot.className = 'dot offline';
+                statusDot.className = 'status-dot online';
+            } else if (status === 'connecting') {
+                statusText.innerText = 'Connecting...';
+                statusDot.className = 'status-dot offline';
+            } else {
+                statusText.innerText = 'System Offline';
+                statusDot.className = 'status-dot offline';
             }
-          }
 
-          setInterval(update, 5000);
-          update();
-        </script>
-      </body>
-    </html>
+            // Update uptime
+            uptimeText.innerText = formatUptime(uptime || 0);
+
+            // Update coordinates
+            if (coords && coords.x !== undefined) {
+                coordsText.innerHTML = `📍 ${Math.floor(coords.x)}, ${Math.floor(coords.y)}, ${Math.floor(coords.z)}`;
+            } else {
+                coordsText.innerHTML = '📍 Searching...';
+            }
+        }
+
+        async function fetchBotStatus() {
+            try {
+                const response = await fetch('/health');
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                updateStatusUI(data.status, data.uptime, data.coords);
+            } catch (error) {
+                console.error('Failed to fetch bot status:', error);
+                updateStatusUI('offline', 0, null);
+            }
+        }
+
+        // Initial fetch
+        fetchBotStatus();
+
+        // Set up auto-refresh
+        setInterval(fetchBotStatus, 5000);
+
+        // Add smooth entrance animation
+        document.querySelector('.dashboard-card').style.opacity = '0';
+        document.querySelector('.dashboard-card').style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            document.querySelector('.dashboard-card').style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            document.querySelector('.dashboard-card').style.opacity = '1';
+            document.querySelector('.dashboard-card').style.transform = 'translateY(0)';
+        }, 100);
+    </script>
+</body>
+</html>
   `);
 });
 app.get('/tutorial', (req, res) => {
