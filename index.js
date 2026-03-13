@@ -259,7 +259,11 @@ app.get('/tutorial', (req, res) => {
   < html >
       <head>
         <title>${config.name} - Setup Guide</title>
-        <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+       <!-- Bright Creeper Head Favicon -->
+       <link rel="icon" type="image/svg+xml" href="https://cdn.iconscout.com/icon/free/png-512/free-minecraft-icon-svg-download-png-282774.png?f=webp&w=256">
         <style>
           body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #cbd5e1; padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
           h1, h2 { color: #2dd4bf; }
